@@ -60,7 +60,7 @@ public class StuServiceImpl implements StuService {
         stuMapper.insert(stu);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public void saveChildren(){
         saveChildren1();
