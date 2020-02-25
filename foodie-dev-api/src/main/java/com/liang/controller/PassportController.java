@@ -25,20 +25,20 @@ public class PassportController {
     private UserService userService;
 
     @GetMapping("/usernameIsExist")
-    public int usernameIsExist(@RequestParam String username){
+    public HttpStatus usernameIsExist(@RequestParam String username){
 
         //1.判断用户名是否为空
         if (StringUtils.isBlank(username)) {
-            return 500;
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         //2.查找用户名是否存在
         Boolean isExist = userService.queryUserIsExist(username);
         if (isExist) {
-            return 500;
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
 
         //3.请求成功，用户名没有重复
-        return 200;
+        return HttpStatus.OK;
     }
 }
