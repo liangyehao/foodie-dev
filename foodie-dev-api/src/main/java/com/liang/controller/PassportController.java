@@ -24,6 +24,11 @@ public class PassportController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 检查用户名是否已存在
+     * @param username 用户名
+     * @return 检查结果
+     */
     @GetMapping("/usernameIsExist")
     public HttpStatus usernameIsExist(@RequestParam String username){
 
