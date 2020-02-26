@@ -1,6 +1,7 @@
 package com.liang.controller;
 
 import com.liang.service.UserService;
+import com.liang.utils.ServerResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,20 +31,20 @@ public class PassportController {
      * @return 检查结果
      */
     @GetMapping("/usernameIsExist")
-    public HttpStatus usernameIsExist(@RequestParam String username){
+    public ServerResponse usernameIsExist(@RequestParam String username){
 
         //1.判断用户名是否为空
         if (StringUtils.isBlank(username)) {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
+            return ServerResponse.errMsg("用户名不能为空");
         }
 
         //2.查找用户名是否存在
         Boolean isExist = userService.queryUserIsExist(username);
         if (isExist) {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
+            return ServerResponse.errMsg("用户名已存在");
         }
 
         //3.请求成功，用户名没有重复
-        return HttpStatus.OK;
+        return ServerResponse.ok();
     }
 }
