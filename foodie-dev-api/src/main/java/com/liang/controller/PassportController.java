@@ -54,7 +54,6 @@ public class PassportController {
      */
     @PostMapping("/regist")
     public ServerResponse regist(@RequestBody UserBO userBO){
-
         String username = userBO.getUsername();
         String password = userBO.getPassword();
         String confirmPassword = userBO.getConfirmPassword();
@@ -67,14 +66,14 @@ public class PassportController {
         }
 
         // 1.查询用户名是否存在
-        //2.查找用户名是否存在
         boolean isExist = userService.queryUserIsExist(username);
         if (isExist) {
             return ServerResponse.errMsg("用户名已存在");
         }
 
         // 2.判断密码长度不能小于6
-        if (password.length()<6) {
+        int atLeastLength = 6;
+        if (password.length()<atLeastLength) {
             return ServerResponse.errMsg("密码长度不能小于6");
         }
 
