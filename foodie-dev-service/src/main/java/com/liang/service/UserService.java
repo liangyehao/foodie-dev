@@ -1,5 +1,8 @@
 package com.liang.service;
 
+import com.liang.pojo.Users;
+import com.liang.pojo.bo.UserBO;
+
 /**
  * @author liangyehao
  * @version 1.0
@@ -14,4 +17,11 @@ public interface UserService {
      * @return 用户是否存在
      */
     Boolean queryUserIsExist(String username);
+
+    /**
+     * 创建用户
+     * @param userBo 前端用户类
+     * @return 创建后的用户
+     */
+    Users createUser(UserBO userBo);
 }

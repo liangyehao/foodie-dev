@@ -93,6 +93,14 @@
             <scope>provided</scope>
         </dependency>
 
+<!--        &lt;!&ndash;n3r依赖&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.bingoohuang</groupId>-->
+<!--            <artifactId>org.n3r.idworker-client</artifactId>-->
+<!--            <version>1.5</version>-->
+<!--        </dependency>-->
+
+
 
     </dependencies>
 
