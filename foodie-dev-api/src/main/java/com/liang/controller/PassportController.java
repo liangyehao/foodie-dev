@@ -3,9 +3,10 @@ package com.liang.controller;
 import com.liang.pojo.bo.UserBO;
 import com.liang.service.UserService;
 import com.liang.utils.ServerResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2020/2/25 22:26
  * @content 用户登录控制类
  */
+@Api(value = "注册登录", tags = {"用于注册登录的相关的接口"})
 @RestController
 @RequestMapping("/passport")
 public class PassportController {
@@ -28,6 +30,7 @@ public class PassportController {
      * @param username 用户名
      * @return 检查结果
      */
+    @ApiOperation(value = "用户是否存在",notes = "用户是否存在",httpMethod = "GET")
     @GetMapping("/usernameIsExist")
     public ServerResponse usernameIsExist(@RequestParam String username){
 
@@ -52,6 +55,7 @@ public class PassportController {
      * @param userBO 用户信息
      * @return 注册结果
      */
+    @ApiOperation(value = "用户注册",notes = "用户注册",httpMethod = "POST")
     @PostMapping("/regist")
     public ServerResponse regist(@RequestBody UserBO userBO){
         String username = userBO.getUsername();
@@ -83,8 +87,6 @@ public class PassportController {
         }
 
         // 4.完成注册
-        userService.createUser(userBO);
-
-        return ServerResponse.ok();
+        return ServerResponse.okMap(userService.createUser(userBO));
     }
 }

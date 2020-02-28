@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServerResponse<T> {
+public class ServerResponse {
     private int status;
     private String msg;
-    private T data;
+    private Object data;
 
     public static ServerResponse ok(){
         return new ServerResponse(200, "ok", null);
@@ -27,5 +27,8 @@ public class ServerResponse<T> {
         return new ServerResponse(500,msg,null);
     }
 
+    public static ServerResponse okMap(Object data){
+        return new ServerResponse(200,"ok",data);
+    }
 
 }
