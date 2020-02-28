@@ -1,13 +1,17 @@
 package com.liang.controller;
 
+import com.liang.pojo.Users;
 import com.liang.pojo.bo.UserBO;
 import com.liang.service.UserService;
+import com.liang.utils.MD5Util;
 import com.liang.utils.ServerResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @author liangyehao
@@ -87,6 +91,27 @@ public class PassportController {
         }
 
         // 4.完成注册
-        return ServerResponse.okMap(userService.createUser(userBO));
+        return ServerResponse.ok(userService.createUser(userBO));
+    }
+
+    @ApiOperation(value = "用户登录",notes = "用户登录",httpMethod = "POST")
+    @PostMapping("/login")
+    public ServerResponse login(@RequestBody UserBO userBO) throws NoSuchAlgorithmException {
+        String username = userBO.getUsername();
+        String password = userBO.getPassword();
+
+        // 0.判断用户名和密码不能为空
+        if(StringUtils.isBlank(username)
+                || StringUtils.isBlank(password)){
+            return ServerResponse.errMsg("用户名和密码不能为空");
+        }
+
+        // 1.完成登录
+        Users user = userService.queryUserForLogin(username, MD5Util.getMD5Str(password));
+        if (user==null) {
+            return ServerResponse.errMsg("用户名密码不正确");
+        }
+
+        return ServerResponse.ok(user);
     }
 }

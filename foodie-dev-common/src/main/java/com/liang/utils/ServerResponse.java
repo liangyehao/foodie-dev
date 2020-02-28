@@ -27,7 +27,7 @@ public class ServerResponse {
         return new ServerResponse(500,msg,null);
     }
 
-    public static ServerResponse okMap(Object data){
+    public static ServerResponse ok(Object data){
         return new ServerResponse(200,"ok",data);
     }
 
