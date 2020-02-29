@@ -1,5 +1,6 @@
 package com.liang.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,12 +13,17 @@ import javax.servlet.http.HttpSession;
  * @date 2020/2/28 23:15
  * @content 测试controller
  */
+@Slf4j
 @RestController
 @RequestMapping("/foo")
 public class FooController {
 
     @RequestMapping("/hello")
     public Object hello(){
+        log.debug("debug::hello world!!!!!");
+        log.info("info::hello world!!!!!");
+        log.warn("warn::hello world!!!!!");
+        log.error("error::hello world!!!!!");
         return "hello world!";
     }
 
@@ -27,7 +33,6 @@ public class FooController {
         session.setAttribute("userInfo","new user");
         session.setMaxInactiveInterval(3600);
         session.getAttribute("userInfo");
-//        session.removeAttribute("userInfo");
         return "ok";
     }
 }
