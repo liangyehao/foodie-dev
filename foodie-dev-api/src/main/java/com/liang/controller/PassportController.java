@@ -9,6 +9,7 @@ import com.liang.utils.MD5Util;
 import com.liang.utils.ServerResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import java.security.NoSuchAlgorithmException;
  * @date 2020/2/25 22:26
  * @content 用户登录控制类
  */
+@Slf4j
 @Api(value = "注册登录", tags = {"用于注册登录的相关的接口"})
 @RestController
 @RequestMapping("/passport")
@@ -103,7 +105,7 @@ public class PassportController {
         setNullProperties(userResult);
 
         // 6.设置cookie存放用户信息
-        CookieUtils.setCookie(response,request,"user", JSONObject.toJSONString(userResult),true);
+        CookieUtils.setCookie(request,response,"user", JSONObject.toJSONString(userResult),true);
 
 
         return ServerResponse.ok();
@@ -133,11 +135,30 @@ public class PassportController {
         setNullProperties(userResult);
 
         // 3.设置cookie存放用户信息
-        CookieUtils.setCookie(response,request,"user", JSONObject.toJSONString(userResult),true);
+        CookieUtils.setCookie(request,response,"user", JSONObject.toJSONString(userResult),true);
 
         return ServerResponse.ok(userResult);
     }
 
+    @ApiOperation(value = "用户退出登录",notes = "用户退出登录",httpMethod = "POST")
+    @PostMapping("/logout")
+    public ServerResponse logout(@RequestParam String userId,
+                                HttpServletResponse response,
+                                HttpServletRequest request) {
+        //清除用户相关cookie信息
+        CookieUtils.deleteCookie(request,response,"user");
+        log.info("======== 用户【{}】退出登录 ========",userId);
+
+        // TODO 用户退出登录需要清空购物车
+        // TODO 分布式会话中需要清除用户数据
+
+        return ServerResponse.ok();
+    }
+
+    /**
+     *  用户信息返回前端展示前，设置用户私密信息为空
+     * @param userResult 用户信息
+     */
     private void setNullProperties(Users userResult){
         userResult.setPassword(null);
         userResult.setMobile(null);
