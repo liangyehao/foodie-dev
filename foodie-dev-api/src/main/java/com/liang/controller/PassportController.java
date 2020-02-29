@@ -1,8 +1,10 @@
 package com.liang.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.liang.pojo.Users;
 import com.liang.pojo.bo.UserBO;
 import com.liang.service.UserService;
+import com.liang.utils.CookieUtils;
 import com.liang.utils.MD5Util;
 import com.liang.utils.ServerResponse;
 import io.swagger.annotations.Api;
@@ -11,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -61,7 +65,9 @@ public class PassportController {
      */
     @ApiOperation(value = "用户注册",notes = "用户注册",httpMethod = "POST")
     @PostMapping("/regist")
-    public ServerResponse regist(@RequestBody UserBO userBO){
+    public ServerResponse regist(@RequestBody UserBO userBO,
+                                HttpServletResponse response,
+                                 HttpServletRequest request){
         String username = userBO.getUsername();
         String password = userBO.getPassword();
         String confirmPassword = userBO.getConfirmPassword();
@@ -91,12 +97,23 @@ public class PassportController {
         }
 
         // 4.完成注册
-        return ServerResponse.ok(userService.createUser(userBO));
+        Users userResult = userService.createUser(userBO);
+
+        // 5.返回值设置私密信息为空
+        setNullProperties(userResult);
+
+        // 6.设置cookie存放用户信息
+        CookieUtils.setCookie(response,request,"user", JSONObject.toJSONString(userResult),true);
+
+
+        return ServerResponse.ok();
     }
 
     @ApiOperation(value = "用户登录",notes = "用户登录",httpMethod = "POST")
     @PostMapping("/login")
-    public ServerResponse login(@RequestBody UserBO userBO) throws NoSuchAlgorithmException {
+    public ServerResponse login(@RequestBody UserBO userBO,
+                                HttpServletResponse response,
+                                HttpServletRequest request) throws NoSuchAlgorithmException {
         String username = userBO.getUsername();
         String password = userBO.getPassword();
 
@@ -107,11 +124,26 @@ public class PassportController {
         }
 
         // 1.完成登录
-        Users user = userService.queryUserForLogin(username, MD5Util.getMD5Str(password));
-        if (user==null) {
+        Users userResult = userService.queryUserForLogin(username, MD5Util.getMD5Str(password));
+        if (userResult==null) {
             return ServerResponse.errMsg("用户名密码不正确");
         }
 
-        return ServerResponse.ok(user);
+        // 2.返回值设置私密信息为空
+        setNullProperties(userResult);
+
+        // 3.设置cookie存放用户信息
+        CookieUtils.setCookie(response,request,"user", JSONObject.toJSONString(userResult),true);
+
+        return ServerResponse.ok(userResult);
+    }
+
+    private void setNullProperties(Users userResult){
+        userResult.setPassword(null);
+        userResult.setMobile(null);
+        userResult.setEmail(null);
+        userResult.setCreatedTime(null);
+        userResult.setUpdatedTime(null);
+        userResult.setBirthday(null);
     }
 }
