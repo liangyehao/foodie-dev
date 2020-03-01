@@ -24,7 +24,7 @@ public class CorsConfig {
         // 1.添加cors相关信息
         CorsConfiguration config = new CorsConfiguration();
         // 设置允许请求来源
-        config.addAllowedOrigin("http://localhost:8080");
+        config.addAllowedOrigin("*");
         // 设置是否发送cookie
         config.setAllowCredentials(true);
         // 设置允许的请求方式
