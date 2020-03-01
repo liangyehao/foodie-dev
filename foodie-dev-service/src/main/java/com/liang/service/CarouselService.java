@@ -17,5 +17,5 @@ public interface CarouselService {
      * @param isShow 是否展示
      * @return 轮播图集合
      */
-    List<Carousel> queryAll(Integer isShow);
+    List<Carousel> findAllCarousel(Integer isShow);
 }

@@ -22,7 +22,7 @@ public class CarouselServiceImpl implements CarouselService {
     private CarouselMapper carouselMapper;
 
     @Override
-    public List<Carousel> queryAll(Integer isShow) {
+    public List<Carousel> findAllCarousel(Integer isShow) {
         Example example = new Example(Carousel.class);
         example.orderBy("sort").asc();
         Example.Criteria criteria = example.createCriteria();

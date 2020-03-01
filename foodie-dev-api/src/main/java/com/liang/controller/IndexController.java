@@ -2,7 +2,9 @@ package com.liang.controller;
 
 import com.liang.enums.YesOrNo;
 import com.liang.pojo.Carousel;
+import com.liang.pojo.Category;
 import com.liang.service.CarouselService;
+import com.liang.service.CategoryService;
 import com.liang.utils.ServerResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,16 +27,26 @@ import java.util.List;
 @Api(value = "首页", tags = {"首页信息展示相关接口"})
 @RestController
 @RequestMapping("/index")
-public class CarouselController {
+public class IndexController {
 
     @Autowired
     private CarouselService carouselService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @ApiOperation(value = "查询所有轮播图",notes = "查询所有轮播图",httpMethod = "GET")
     @RequestMapping("/carousel")
     public ServerResponse findAllCarousel(){
-        List<Carousel> carousels = carouselService.queryAll(YesOrNo.YES.type);
+        List<Carousel> carousels = carouselService.findAllCarousel(YesOrNo.YES.type);
         return ServerResponse.ok(carousels);
+    }
+
+    @ApiOperation(value = "查询商品分类（一级分类）",notes = "查询商品分类（一级分类）",httpMethod = "GET")
+    @RequestMapping("/cats")
+    public ServerResponse cats(){
+        List<Category> categories = categoryService.queryAllRootLevelCat();
+        return ServerResponse.ok(categories);
     }
 
 }
