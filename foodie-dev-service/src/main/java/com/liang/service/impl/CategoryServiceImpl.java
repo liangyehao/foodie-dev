@@ -7,6 +7,8 @@ import com.liang.pojo.vo.CategoryVO;
 import com.liang.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -32,6 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
      *
      * @return 一级分类菜单
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<Category> queryAllRootLevelCat() {
         Example example = new Example(Category.class);
@@ -46,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @param rootCatId 一级分类id
      * @return 子分类信息
      */
+    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<CategoryVO> getSubCatList(Integer rootCatId) {
         return categoryMapperCustom.getSubCatList(rootCatId);
