@@ -1,6 +1,7 @@
 package com.liang.service;
 
 import com.liang.pojo.Category;
+import com.liang.pojo.vo.CategoryVO;
 
 import java.util.List;
 
@@ -17,4 +18,11 @@ public interface CategoryService {
      * @return 一级分类菜单
      */
     List<Category> queryAllRootLevelCat();
+
+    /**
+     * 根据一级分类id查询子分类信息
+     * @param rootCatId 一级分类id
+     * @return 子分类信息
+     */
+    List<CategoryVO> getSubCatList(Integer rootCatId);
 }
