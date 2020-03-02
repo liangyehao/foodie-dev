@@ -4,6 +4,7 @@ import com.liang.enums.YesOrNo;
 import com.liang.pojo.Carousel;
 import com.liang.pojo.Category;
 import com.liang.pojo.vo.CategoryVO;
+import com.liang.pojo.vo.NewItemsVO;
 import com.liang.service.CarouselService;
 import com.liang.service.CategoryService;
 import com.liang.utils.ServerResponse;
@@ -62,6 +63,18 @@ public class IndexController {
         }
         List<CategoryVO> subCatList = categoryService.getSubCatList(rootCatId);
         return ServerResponse.ok(subCatList);
+    }
+
+    @ApiOperation(value = "查询每个一级分类下的最新的6条商品数据",notes = "查询每个一级分类下的最新的6条商品数据",httpMethod = "GET")
+    @RequestMapping("/sixNewItems/{rootCatId}")
+    public ServerResponse sixNewItems(
+            @ApiParam(name = "rootCatId",value = "一级分类id",defaultValue = "1",required = true)
+            @PathVariable Integer rootCatId){
+        if (rootCatId==null) {
+            ServerResponse.errMsg("分类不存在");
+        }
+        List<NewItemsVO> sixNewItemsLazy = categoryService.getSixNewItemsLazy(rootCatId);
+        return ServerResponse.ok(sixNewItemsLazy);
     }
 
 }
